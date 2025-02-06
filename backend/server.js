@@ -1,31 +1,37 @@
-// Charger les variables d'environnement depuis le fichier .env
+// server.js
+
+// Load environment variables from .env
 require('dotenv').config();
 
-// Importer mongoose pour interagir avec MongoDB
 const mongoose = require('mongoose');
-
-// Connexion à MongoDB en utilisant la variable d'environnement MONGO_URI
-const mongo_url = process.env.MONGO_URI;
-
-mongoose.connect(mongo_url, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('MongoDB Connected...');
-    })
-    .catch((err) => {
-        console.error('MongoDB Connection Error: ', err);
-    });
-
-// Votre code d'application ici (serveur, routes, etc.)
-// Exemple : démarrer un serveur Express
 const express = require('express');
 const app = express();
 
-// Exemple d'endpoint
+const mongo_url = process.env.MONGO_URI;
+
+// Connect to MongoDB
+mongoose.connect(mongo_url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+      console.log('MongoDB Connected...');
+  })
+  .catch((err) => {
+      console.error('MongoDB Connection Error: ', err);
+  });
+
+// Middleware to parse JSON bodies in requests
+app.use(express.json());
+
+
+
+// Optionally, mount other routes here (e.g., journaux, users, etc.)
+const coursRoutes = require('./Routes/CoursRoutes');
+app.use('/', coursRoutes);
+// Default endpoint for testing
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-// Démarrer le serveur
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

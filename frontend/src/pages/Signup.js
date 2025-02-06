@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/Auth.css';
 
 function Signup() {
     const [signupInfo, setSignupInfo] = useState({
         name: '',
         email: '',
         password: '',
+        telephone: '',
     });
 
     const navigate = useNavigate();
@@ -19,85 +21,99 @@ function Signup() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        const { name, email, password, telephone } = signupInfo;
 
-        const { name, email, password } = signupInfo;
+        if (!name || !email || !password || !telephone) {
+            toast.error('All fields are required.');
+            return;
+        }
 
-        if (!name || !email || !password) {
-            toast.error('Tous les champs (nom, email et mot de passe) sont requis.');
+        const phoneRegex = /^\d{8}$/;
+        if (!phoneRegex.test(telephone)) {
+            toast.error('The phone number must be exactly 8 digits.');
             return;
         }
 
         try {
             const response = await fetch('http://localhost:5000/api/auth/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(signupInfo),
             });
 
-            // Vérifier le code de statut HTTP pour voir si la réponse est correcte
             const result = await response.json();
 
             if (!response.ok) {
-                toast.error(result.message || 'Une erreur est survenue.');
+                toast.error(result.message || 'An error occurred.');
                 return;
             }
 
-            // Vérifiez si le champ "success" existe et est true
             if (result.success) {
-                toast.success('Inscription réussie! Redirection vers la page de connexion.');
-                navigate('/login');  // Rediriger vers la page de connexion après l'inscription réussie
+                toast.success('Signup successful! Redirecting...');
+                navigate('/login');
             } else {
-                toast.error(result.message || 'Une erreur est survenue.');
+                toast.error(result.message || 'An error occurred.');
             }
         } catch (error) {
-            console.error('Erreur lors de l\'inscription :', error);
-            toast.error('Impossible de se connecter au serveur. Veuillez réessayer plus tard.');
+            console.error('Signup error:', error);
+            toast.error('Cannot connect to the server. Please try again later.');
         }
     };
 
     return (
-        <div className='container'>
-            <h1>Signup</h1>
-            <form onSubmit={handleSignup}>
-                <div>
-                    <label htmlFor='name'>Name</label>
-                    <input
-                        onChange={handleChange}
-                        type='text'
-                        name='name'
-                        autoFocus
-                        placeholder='Enter your name...'
-                        value={signupInfo.name}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='email'>Email</label>
-                    <input
-                        onChange={handleChange}
-                        type='email'
-                        name='email'
-                        placeholder='Enter your email...'
-                        value={signupInfo.email}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='password'>Password</label>
-                    <input
-                        onChange={handleChange}
-                        type='password'
-                        name='password'
-                        placeholder='Enter your password...'
-                        value={signupInfo.password}
-                    />
-                </div>
-                <button type='submit'>Signup</button>
-                <span>
-                    Already have an account? <Link to="/login">Login</Link>
-                </span>
-            </form>
-            <ToastContainer />
+        <div className="auth-container">
+            <div className="auth-box">
+                <h1>Signup</h1>
+                <form onSubmit={handleSignup}>
+                    <div>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            onChange={handleChange}
+                            type="text"
+                            name="name"
+                            placeholder="Enter your name..."
+                            value={signupInfo.name}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            onChange={handleChange}
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email..."
+                            value={signupInfo.email}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            onChange={handleChange}
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password..."
+                            value={signupInfo.password}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="telephone">Telephone</label>
+                        <input
+                            onChange={handleChange}
+                            type="tel"
+                            name="telephone"
+                            placeholder="Enter your 8-digit telephone..."
+                            value={signupInfo.telephone}
+                            pattern="\d{8}"
+                            title="Telephone number must be exactly 8 digits"
+                        />
+                    </div>
+                    <button type="submit">Signup</button>
+                    <span>
+                        Already have an account? <Link to="/login">Login</Link>
+                    </span>
+                </form>
+                <ToastContainer />
+            </div>
         </div>
     );
 }

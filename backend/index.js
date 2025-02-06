@@ -4,6 +4,7 @@ const connectToDatabase = require('../backend/Models/db');
 const authRouter = require('./Routes/AuthRouter');
 const journalRoutes = require('./Routes/journalRoutes');
 const CompteComptable = require('./Routes/CompteComptableRoutes');
+const coursRoutes = require('./Routes/CoursRoutes');
 const cors = require('cors');
 
 const app = express();
@@ -20,6 +21,7 @@ connectToDatabase();
 app.use('/api/auth', authRouter);
 app.use('/', journalRoutes);
 app.use('/', CompteComptable);
+app.use('/', coursRoutes);
 
 // Démarrer le serveur
 const PORT = process.env.PORT || 5000;

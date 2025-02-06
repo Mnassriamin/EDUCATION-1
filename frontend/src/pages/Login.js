@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';  // Assurez-vous que 'Link' est importé depuis 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { handleError, handleSuccess } from '../utils';
+import '../styles/Auth.css'; // Ensure login has its own styles
 
 function Login({ setIsAuthenticated }) {
     const [loginInfo, setLoginInfo] = useState({
@@ -13,9 +14,7 @@ function Login({ setIsAuthenticated }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const copyLoginInfo = { ...loginInfo };
-        copyLoginInfo[name] = value;
-        setLoginInfo(copyLoginInfo);
+        setLoginInfo((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleLogin = async (e) => {
@@ -28,61 +27,61 @@ function Login({ setIsAuthenticated }) {
             const url = `http://localhost:5000/api/auth/login`;
             const response = await fetch(url, {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginInfo)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginInfo),
             });
+
             const result = await response.json();
-            const { message, token, error } = result;
-    
+            console.log("Backend response:", result);
+            const { message, token, error, role, userId } = result;
+
             if (token) {
-                // Sauvegarder le token dans le localStorage
                 localStorage.setItem('token', token);
-                
-                // Mettre à jour l'état d'authentification dans le parent
+                localStorage.setItem('role', role);
+                localStorage.setItem('userId', userId);
                 setIsAuthenticated(true);
-    
-                // Redirection vers la page d'accueil
+                handleSuccess('Login successful!');
                 navigate('/home');
             } else {
-                // Si aucune erreur, afficher un message d'erreur
-                const details = error?.details[0].message || message;
-                handleError(details);
+                handleError(error?.details[0]?.message || message);
             }
         } catch (err) {
             handleError(err.message);
         }
     };
-    
+
     return (
-        <div className='container'>
-            <h1>Login</h1>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor='email'>Email</label>
-                    <input
-                        onChange={handleChange}
-                        type='email'
-                        name='email'
-                        placeholder='Enter your email...'
-                        value={loginInfo.email}
-                    />
-                </div>
-                <div>
-                    <label htmlFor='password'>Password</label>
-                    <input
-                        onChange={handleChange}
-                        type='password'
-                        name='password'
-                        placeholder='Enter your password...'
-                        value={loginInfo.password}
-                    />
-                </div>
-                <button type='submit'>Login</button>
-                <span>Doesn't have an account? <Link to="/signup">Signup</Link></span>
-            </form>
-            <ToastContainer />
+        <div className="auth-container">
+            <div className="auth-box">
+                <h1>Login</h1>
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            onChange={handleChange}
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email..."
+                            value={loginInfo.email}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            onChange={handleChange}
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password..."
+                            value={loginInfo.password}
+                        />
+                    </div>
+                    <button type="submit">Login</button>
+                    <span>
+                        Don't have an account? <Link to="/signup">Signup</Link>
+                    </span>
+                </form>
+                <ToastContainer />
+            </div>
         </div>
     );
 }

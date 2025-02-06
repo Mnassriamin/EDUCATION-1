@@ -5,40 +5,45 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Settings from './pages/Settings';
 import JournalList from './components/Journal/JournalList';
-import ComptesList from './components/ComptesComptable/ComptesList';  // Ajout de ComptesList
-// Composants Navbar et Sidebar
+import ComptesList from './components/ComptesComptable/ComptesList';
+// Import Cours CRUD components
+import CreateCours from './components/Cours/CreateCours';
+import ListCours from './components/Cours/ListCours';
+import UpdateCours from './components/Cours/UpdateCours';
+import DeleteCours from './components/Cours/DeleteCours';
+// Navbar and Sidebar components
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidenav';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const navigate = useNavigate(); // Hook pour la navigation
+    const navigate = useNavigate();
     const location = useLocation();
 
-    // Vérifie si un token existe dans le localStorage lors du montage
+    // Check for token in localStorage on mount
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setIsAuthenticated(!!token); // Convertit la présence du token en booléen
+        setIsAuthenticated(!!token);
     }, []);
 
-    // Fonction pour protéger les routes
+    // Function to protect routes
     const PrivateRoute = ({ element }) => {
         return isAuthenticated ? element : <Navigate to="/login" />;
     };
 
-    // Liste des routes sans Navbar ni Sidebar
+    // Routes where Navbar and Sidebar should not be displayed
     const noHeaderRoutes = ["/login", "/signup"];
 
-    // Fonction de déconnexion
+    // Logout function
     const handleLogout = () => {
-        localStorage.removeItem("token"); // Supprime le token
-        setIsAuthenticated(false); // Met à jour l'état d'authentification
-        navigate("/login", { replace: true }); // Redirige vers la page de connexion
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        navigate("/login", { replace: true });
     };
 
     return (
         <div className="App">
-            {/* Affiche Navbar et Sidebar seulement si la route actuelle n'est pas dans noHeaderRoutes */}
+            {/* Display Navbar and Sidebar only if current route is not in noHeaderRoutes */}
             {!noHeaderRoutes.includes(location.pathname) && (
                 <>
                     <Navbar handleLogout={handleLogout} />
@@ -46,10 +51,9 @@ function App() {
                 </>
             )}
 
-            {/* Corps principal de l'application */}
             <div className="content">
                 <Routes>
-                    {/* Redirection de la racine vers la page appropriée */}
+                    {/* Redirect root based on authentication */}
                     <Route
                         path="/"
                         element={
@@ -57,19 +61,17 @@ function App() {
                         }
                     />
 
-                    {/* Page de connexion, redirige vers /home si l'utilisateur est déjà authentifié */}
+                    {/* Public Routes */}
                     <Route 
                         path="/login" 
                         element={<Login setIsAuthenticated={setIsAuthenticated} />} 
                     />
-
-                    {/* Page d'inscription, redirige vers /home si l'utilisateur est déjà authentifié */}
                     <Route 
                         path="/signup" 
                         element={<Signup />} 
                     />
 
-                    {/* Pages protégées (nécessitent une authentification) */}
+                    {/* Protected Routes */}
                     <Route 
                         path="/home" 
                         element={<PrivateRoute element={<Home />} />} 
@@ -86,12 +88,28 @@ function App() {
                         path="/journaux" 
                         element={<PrivateRoute element={<JournalList />} />} 
                     />
-                    {/* Ajout de la route pour ComptesList */}
                     <Route 
                         path="/comptescomptables" 
                         element={<PrivateRoute element={<ComptesList />} />} 
                     />
-                    
+
+                    {/* Cours CRUD Routes */}
+                    <Route 
+                        path="/cours" 
+                        element={<PrivateRoute element={<ListCours />} />} 
+                    />
+                    <Route 
+                        path="/cours/create" 
+                        element={<PrivateRoute element={<CreateCours />} />} 
+                    />
+                    <Route 
+                        path="/cours/update/:id" 
+                        element={<PrivateRoute element={<UpdateCours />} />} 
+                    />
+                    <Route 
+                        path="/cours/delete/:id" 
+                        element={<PrivateRoute element={<DeleteCours />} />} 
+                    />
                 </Routes>
             </div>
         </div>

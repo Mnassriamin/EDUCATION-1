@@ -16,7 +16,8 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import EventIcon from "@mui/icons-material/Event";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import FolderIcon from "@mui/icons-material/Folder";
-import SettingsIcon from "@mui/icons-material/Settings";  // Icône pour Paramètres
+import SettingsIcon from "@mui/icons-material/Settings";
+import SchoolIcon from "@mui/icons-material/School"; // New icon for Cours
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../appStore";
 
@@ -95,8 +96,20 @@ export default function Sidenav() {
         <List>
           {/* Home */}
           <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/")}>
-            <ListItemButton sx={{ minHeight: 48, justifyContent: open ? "initial" : "center", px: 2.5 }}>
-              <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={"Home"} sx={{ opacity: open ? 1 : 0 }} />
@@ -105,8 +118,21 @@ export default function Sidenav() {
 
           {/* Fichiers de base */}
           <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton sx={{ minHeight: 48, justifyContent: open ? "initial" : "center", px: 2.5 }} onClick={handleFichiersClick}>
-              <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+              onClick={handleFichiersClick}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
                 <FolderIcon />
               </ListItemIcon>
               <ListItemText primary={"Fichiers de base"} sx={{ opacity: open ? 1 : 0 }} />
@@ -115,18 +141,76 @@ export default function Sidenav() {
 
           {openFichiers && (
             <List component="div" disablePadding>
-              <ListItem disablePadding sx={{ display: "block", pl: open ? 4 : 2 }} onClick={() => navigate("/journaux")}>
-                <ListItemButton sx={{ minHeight: 40, justifyContent: open ? "initial" : "center", px: 2.5 }}>
-                  <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+              <ListItem
+                disablePadding
+                sx={{ display: "block", pl: open ? 4 : 2 }}
+                onClick={() => navigate("/journaux")}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 40,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
                     <EventIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Journaux"} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
 
-              <ListItem disablePadding sx={{ display: "block", pl: open ? 4 : 2 }} onClick={() => navigate("/comptescomptables")}>
-                <ListItemButton sx={{ minHeight: 40, justifyContent: open ? "initial" : "center", px: 2.5 }}>
-                  <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+              {/* New Cours item added inside Fichiers de base */}
+              <ListItem
+                disablePadding
+                sx={{ display: "block", pl: open ? 4 : 2 }}
+                onClick={() => navigate("/cours")}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 40,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <SchoolIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Cours"} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem
+                disablePadding
+                sx={{ display: "block", pl: open ? 4 : 2 }}
+                onClick={() => navigate("/comptescomptables")}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 40,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
                     <AccountBalanceIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Comptes"} sx={{ opacity: open ? 1 : 0 }} />
@@ -140,9 +224,21 @@ export default function Sidenav() {
 
         {/* Settings */}
         <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate("/settings")}>
-          <ListItemButton sx={{ minHeight: 48, justifyContent: open ? "initial" : "center", px: 2.5 }}>
-            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
-              <SettingsIcon /> {/* Icône Settings */}
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary={"Settings"} sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>
