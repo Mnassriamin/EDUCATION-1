@@ -11,6 +11,8 @@ import CreateCours from './components/Cours/CreateCours';
 import ListCours from './components/Cours/ListCours';
 import UpdateCours from './components/Cours/UpdateCours';
 import DeleteCours from './components/Cours/DeleteCours';
+// Import Event Calendar component
+import EventCalendar from './components/Calandrie/EventCalendar';
 // Navbar and Sidebar components
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidenav';
@@ -109,6 +111,12 @@ function App() {
                     <Route 
                         path="/cours/delete/:id" 
                         element={<PrivateRoute element={<DeleteCours />} />} 
+                    />
+
+                    {/* Event Calendar Route */}
+                    <Route 
+                        path="/calendar" 
+                        element={<PrivateRoute element={<EventCalendar />} />} 
                     />
                 </Routes>
             </div>

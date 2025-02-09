@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 
 const CoursSchema = new mongoose.Schema({
-    // Custom id field (optional; consider removing if you prefer Mongoose's default _id)
-    
     name: {
         type: String,
         required: true,
@@ -14,7 +12,7 @@ const CoursSchema = new mongoose.Schema({
     },
     enseignant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Prof', // Changed from User to Prof
         required: true,
     },
     datedebut: {
@@ -25,10 +23,12 @@ const CoursSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    etudiants: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }]
+    etudiants: [
+        {
+            enfantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent.enfants' }, // Reference enfants directly
+            enfantName: { type: String }, // Store child's name directly for convenience
+        },
+    ],
 }, { timestamps: true });
 
 const Cours = mongoose.model('Cours', CoursSchema);

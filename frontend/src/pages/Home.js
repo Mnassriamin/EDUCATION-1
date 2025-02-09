@@ -13,6 +13,7 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import BarChart from "../charts/BarChart";
+import EventCalendar from "../components/Calandrie/EventCalendar"; // Import the EventCalendar component
 
 export default function Home() {
   return (
@@ -124,12 +125,14 @@ export default function Home() {
                     <div className="paddingall">
                       <span className="pricetitle">Popular Products</span>
                     </div>
-
                     <AccordionDash />
                   </CardContent>
                 </Card>
               </Grid>
             </Grid>
+            {/* Add the EventCalendar component here */}
+            <Box height={20} />
+            
           </Box>
         </Box>
       </div>

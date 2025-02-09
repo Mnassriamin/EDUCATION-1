@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const UserSchema = new mongoose.Schema({
+const ProfSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,28 +13,33 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email address"],
+    },
+    matiereId: {  // Change matiereId to use Number to match the Matiere model
+        type: Number,
+        ref: 'Matiere',  // Reference the Matiere collection
+        required: true,
     },
     password: {
         type: String,
         required: true,
         minlength: 6,
     },
-    role: {
-        type: String,
-        required: true,
-        enum: ['parent', 'enseignant', 'assistant', 'admin'],
-        default: 'parent',
-    },
     telephone: {
-        type: String, 
+        type: String,
         required: true,
         match: [/^\d{8}$/, "Telephone number must be exactly 8 digits"],
     },
-    
-});
+    etudiants: [  // Array of child objects (no ref)
+        {
+            enfantId: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId }, // Generate a unique ID for each child
+            enfantName: { type: String, required: true },
+        },
+    ],
+}, { timestamps: true });
 
 // Middleware to hash the password before saving
-UserSchema.pre('save', async function (next) {
+ProfSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
 
     try {
@@ -47,8 +52,8 @@ UserSchema.pre('save', async function (next) {
 });
 
 // Method to compare passwords
-UserSchema.methods.comparePassword = async function (candidatePassword) {
+ProfSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Prof', ProfSchema);

@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser } = require('../Controllers/AuthController');
+const { registerProf, registerParent, loginUser } = require('../Controllers/AuthController'); // Import loginUser
 
-// Route pour l'enregistrement
-router.post('/register', registerUser);
+// Routes for registration
+router.post('/register/prof', registerProf);
+router.post('/register/parent', registerParent);
 
-// Route pour la connexion
-router.post('/login', loginUser);
+// Route for login (single route)
+router.post('/login', loginUser); // Use loginUser
 
 module.exports = router;

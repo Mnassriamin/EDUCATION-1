@@ -1,14 +1,15 @@
+// routes/CoursRoutes.js
 const express = require('express');
 const router = express.Router();
-const coursController = require('../Controllers/CoursController');
+const coursController = require('../Controllers/CoursController'); // Corrected path
 
-// Define endpoints with the full prefix, just like your CompteComptable router
-router.post('/api/cours', coursController.createCours);
-router.get('/api/cours', coursController.getAllCours);
-router.get('/api/cours/:id', coursController.getCoursById);
-router.put('/api/cours/:id', coursController.updateCours);
-router.delete('/api/cours/:id', coursController.deleteCours);
-router.put('/api/cours/:id/enroll', coursController.enrollEtudiant);
+// Route pour créer un cours (nécessite une authentification)
+router.post('/api/cours', coursController.createCours); // Example: Requires authentication
+
+// Route pour récupérer toutes les matières
 router.get('/api/matieres', coursController.getAllMatieres);
+
+//Get All Profs
+router.get('/api/profs', coursController.getAllProfs);
 
 module.exports = router;

@@ -170,7 +170,7 @@ export default function Sidenav() {
               <ListItem
                 disablePadding
                 sx={{ display: "block", pl: open ? 4 : 2 }}
-                onClick={() => navigate("/cours")}
+                onClick={() => navigate("/calendar")}
               >
                 <ListItemButton
                   sx={{
